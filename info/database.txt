@@ -1,0 +1,7 @@
+
+mysql commands:
+
+create database doorapp;
+use doorapp;
+create table users (user varchar(60), pass varchar(256), unique (user));
+

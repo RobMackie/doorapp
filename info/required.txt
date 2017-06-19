@@ -1,0 +1,16 @@
+You will need to install the following packages (using apt-get)
+
+apache2
+php5
+mysql-server
+
+
+You will need to download and compile wiringPi
+
+git clone git://git.drogon.net/wiringPi
+
+then cd wiringPi
+./build
+
+
+
