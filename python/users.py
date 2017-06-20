@@ -1,5 +1,6 @@
 import os
 import json
+import argparse
 from passlib.apps import custom_app_context as pwd_context
 
 class Users(object):
@@ -11,6 +12,11 @@ class Users(object):
                 self.users = json.loads(user_file.read())         
         except:
             pass
+    def __str__(self):
+        result = ''
+        for user in self.users:
+            result +=  user + '\n'
+        return result
     def save(self):
         with open(self.path, 'w') as user_file:
                json.dump(self.users, user_file)
@@ -24,6 +30,7 @@ class Users(object):
         uname = self.get(username);
         if uname:
             del self.users[uname];
+            self.save()
             
     def change_password(self, username, newpass):
         self.users[username]['password'] = pwd_context.hash(newpass)
@@ -44,14 +51,17 @@ class Users(object):
             return False;
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--add', nargs=2, dest='user_add', default=[], help='add user <username> <pass>')
+    parser.add_argument('--del', nargs=1, dest='user_del', default=[], help='del user <username>')
+    results = parser.parse_args()
+    
     users = Users();
-    users.add('test1', 'testpass');
-    if users.verify_password('test1','testpass'):
-        print 'Password verify positive works'
-    else:
-        print 'Password verify positive FAIL'
-    if users.verify_password('test1','wrongpass'):
-        print 'Wrong password negative FAIL'
-    else:
-        print 'Wrong password negative works'
-    users.remove('test1')
+    if results.user_add:
+       users.add(results.user_add[0], results.user_add[1])
+    if results.user_del:
+        users.remove(results.user_del[0])
+
+    print "User list"
+    print "========="
+    print users
