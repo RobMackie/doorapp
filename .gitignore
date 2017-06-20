@@ -1,0 +1,10 @@
+# keep compiled python out of repo
+*.pyc
+# keep out annoying mac files
+.DS_Store
+# keep out user data
+sessions/
+# keep out log files
+*.log
+# For virtual environments
+venv/

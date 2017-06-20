@@ -1,0 +1,2 @@
+CherryPy==8.1.2
+passlib==1.7.0
