@@ -4,6 +4,7 @@
 .DS_Store
 # keep out user data
 sessions/
+users.json
 # keep out log files
 *.log
 # For virtual environments
