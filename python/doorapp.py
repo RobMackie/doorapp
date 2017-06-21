@@ -3,10 +3,12 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 from users import Users
 import argparse
+import time
 
 ## For running on Raspberry Pi
 try:
    import RPi.GPIO as GPIO 
+   TEST_ONLY = False
 except:
    TEST_ONLY = True
 
@@ -34,7 +36,7 @@ class DoorGPIO(object):
         if not TEST_ONLY:
            print "GPIO Version: " + GPIO.VERSION
            GPIO.setmode(GPIO.BOARD)
-           self.pin = 17
+           self.pin = 11   # This is the header pin, NOT the GPIO pin
            GPIO.setup(self.pin, GPIO.OUT)
         else:
            print "---- NO GPIO WORKING!!! ---- "
@@ -43,7 +45,7 @@ class DoorGPIO(object):
         if not TEST_ONLY:
            GPIO.output(self.pin, GPIO.HIGH)
            time.sleep(5)
-           GPIO.output(self.pin, GPIO.LOW)
+           GPIO.output(self.pin, not GPIO.input(self.pin))
         
 
 class DoorApp(object):
