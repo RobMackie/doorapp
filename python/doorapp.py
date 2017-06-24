@@ -4,6 +4,7 @@ from mako.lookup import TemplateLookup
 from users import Users
 import argparse
 import time
+import threading
 
 logFile = open("doorapp.log", "a+", 0)   # 0 is unbuffered
 
@@ -13,25 +14,32 @@ try:
    TEST_ONLY = False
 except:
    TEST_ONLY = True
+   
+def unlockIO(pin):
+   if TEST_ONLY:
+      print "Unlock test"
+   elif GPIO.input(pin) != GPIO.HIGH:
+      GPIO.output(pin, GPIO.HIGH)
+      time.sleep(5)
+      GPIO.output(pin, not GPIO.input(self.pin))
+
 
 class DoorGPIO(object):
     def __init__(self):
+        self.pin = 11;
         if not TEST_ONLY:
            print "GPIO Version: " + GPIO.VERSION
            GPIO.setmode(GPIO.BOARD)
-           self.pin = 11   # This is the header pin, NOT the GPIO pin
            GPIO.setup(self.pin, GPIO.OUT)
         else:
            print "---- NO GPIO WORKING!!! ---- "
+    
     def unlock(self, user):
         logStr = time.asctime() + ": " + user + " unlocking door"
-        print logStr
+        print "--- " + logStr
         logFile.write(logStr)
-        if not TEST_ONLY:
-           GPIO.output(self.pin, GPIO.HIGH)
-           time.sleep(5)
-           GPIO.output(self.pin, not GPIO.input(self.pin))
-        
+        t = threading.Thread(target=unlockIO,args=(self.pin,))
+        t.start()
 
 class DoorApp(object):
     def __init__(self):
