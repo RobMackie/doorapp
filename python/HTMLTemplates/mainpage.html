@@ -6,8 +6,10 @@
 <body>
 <CENTER>
 <h1>Welcome to TFD Headquarters!</h1>
-<h3>Logged in as ${username}. <A HREF="logout">logout</A></h3>
+<H3 style="color:red;">>${error}</H3>
 <form action="unlock">
+    <input type="text" name="username" placeholder="Login Name" style="border:1px solid #333333; padding: 2px; margin:4px;"/><br/>
+	<input type="password" name="password"  placeholder="Password" style="border:1px solid #333333; padding: 2px; margin:4px;"/><br/>
     <input type="submit" value="Unlock" />
 </form>
 </CENTER>
