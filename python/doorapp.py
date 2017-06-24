@@ -52,9 +52,9 @@ class DoorApp(object):
     def unlock(self,username=None,password=None):
         if self.users.verify_password(username, password):
             self.door.unlock(username);
-            return self.show_mainpage("");
+            return "";
         else:
-            return self.show_mainpage("Username and password don't match")
+            return "Incorrect user/password combination"
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="TFI Door Unlocker")
