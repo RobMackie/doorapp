@@ -7,10 +7,10 @@
 <body>
 <CENTER>
 <h1>Welcome to TFD Headquarters!</h1>
-<H3 style="color:red;">${error}</H3>
+<H3 class="error">${error}</H3>
 <form>
-    <input id="user_id" type="text" name="username" placeholder="Login Name" style="border:1px solid #333333; padding: 2px; margin:4px;"/><br/>
-	<input id="pass_id" type="password" name="password"  placeholder="Password" style="border:1px solid #333333; padding: 2px; margin:4px;"/><br/>
+    <input id="user_id" type="text" name="username" placeholder="Login Name"/><br/>
+    <input id="pass_id" type="password" name="password"  placeholder="Password"/><br/>
     <input type="button" value="Unlock" onclick="unlock()"/>
 </form>
 </CENTER>
@@ -25,13 +25,13 @@ xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 xhr.onload = function() {
     if (xhr.status === 200){
     	if(xhr.responseText != ''){
-    		alert('Error: ' + xhr.responseText);	
+    		alert('Error: ' + xhr.responseText);
     	}
 		else{
 			alert('Door should have unlocked');
 		}
 		document.getElementById("pass_id").value = '';  // clear password
-    }    
+    }
     else{
         alert('Request failed.  Returned status of ' + xhr.status);
     }

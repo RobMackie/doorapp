@@ -2,8 +2,17 @@
   font-size: inherit;
   font-family: Segoe UI, Roboto, Droid Sans, Verdana, Tahoma, Serif;
 }
-/* Using theme from: https://color.adobe.com/Neutral-Blue-color-theme-22361/ */
 
 body{
 	background-color: #FCFFF5;
+}
+
+.error{
+  style="color:red;"
+}
+
+#password, #login{
+  border: 1px solid #333333;
+  padding: 2px;
+  margine: 4px;
 }
