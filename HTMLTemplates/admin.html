@@ -11,6 +11,7 @@
 <A href="/log">View Log</A>
 <hr/>
 <!-- This will only be shown if an admin -->
+% if users[uname]['admin']:
 <form>
   <H3>Change Users</H3>
 <table class="users" width="100%">
@@ -35,6 +36,7 @@
     <input type="button" value="Change Users" onclick="changeUser()"/>
 </form>
 <HR/>
+% endif
 <!-- end admin only -->
 <form>
     <H3>Change Password</H3>
