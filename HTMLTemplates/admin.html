@@ -38,8 +38,9 @@
 <!-- end admin only -->
 <form>
     <H3>Change Password</H3>
-    <input id="pass_id" type="password" name="newpass1"  placeholder="New Password1"/><br/>
-    <input id="pass_id" type="password" name="newpass2"  placeholder="New Password2"/><br/>
+    <input id="oldpass" class="password" type="password" name="password"  placeholder="Old Password"/><br/>
+    <input id="newpass1" class="password" type="password" name="newpass1"  placeholder="New Password1"/><br/>
+    <input id="newpass2" class="password" type="password" name="newpass2"  placeholder="New Password2"/><br/>
 
     <input type="button" value="Change Password" onclick="changePass()"/>
 </form>
@@ -48,3 +49,37 @@
 </CENTER>
 </body>
 </html>
+<script>
+function changePass(){
+  if(document.getElementById("newpass1").value === document.getElementById("newpass2").value){
+    xhr = new XMLHttpRequest();
+
+    xhr.open('POST', 'changePass', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+        if (xhr.status === 200){
+        	if(xhr.responseText != ''){
+        		alert('Error: ' + xhr.responseText);
+        	}
+    		else{
+    			alert('Password changed!');
+          document.getElementById("oldpass").value = '';
+          document.getElementById("newpass1").value = '';
+          document.getElementById("newpass2").value = '';
+    		}
+    		document.getElementById("pass_id").value = '';  // clear password
+        }
+        else{
+            alert('Request failed.  Returned status of ' + xhr.status);
+        }
+    };
+    sendString = encodeURI('username=${uname}') + '&' +encodeURI('oldpass='+document.getElementById("oldpass").value) + '&'
+    +encodeURI('newpass='+document.getElementById("newpass1").value) + '&'
+    ;
+    xhr.send(sendString);
+  }
+  else{
+    alert("New Passwords don't match");
+  }
+}
+</script>

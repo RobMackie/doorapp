@@ -37,7 +37,8 @@ class Users(object):
             del self.users[uname];
             self.save()
 
-    def change_password(self, username, newpass):
+    def change_password(self, username_in, newpass):
+        username = self.get(username_in)
         self.users[username]['password'] = pwd_context.hash(newpass)
         self.save();
     def get(self, username):   # this will return the case version that is in the users list
@@ -50,6 +51,9 @@ class Users(object):
         return ''   # not found
     def get_users(self):
         return self.users;
+    def get_mac(self, username_in):
+        username = self.get(username_in)
+        return self.users[username]['MAC']
     def verify_password(self, username_in,password):
         username = self.get(username_in)
         if username:

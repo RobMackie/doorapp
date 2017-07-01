@@ -1,4 +1,4 @@
-<html>
+<html id="mainpage">
 	<head>
 		<link rel="stylesheet" type="text/css" href="static/style.css"/>
 	    <title>Door App</title>
@@ -8,15 +8,24 @@
 <CENTER>
 <h1>Welcome to TFD Headquarters!</h1>
 <H3 class="error">${error}</H3>
-<form>
+<form id="form1" action="admin">
     <input id="user_id" type="text" name="username" placeholder="Login Name"/><br/>
-    <input id="pass_id" type="password" name="password"  placeholder="Password"/><br/>
+    <input id="pass_id" class="password" type="password" name="password"  placeholder="Password"/><br/>
     <input type="button" value="Unlock" onclick="unlock()"/>
+		<input type="button" value="Admin" onclick="admin()"/>
 </form>
 </CENTER>
 </body>
 </html>
 <script>
+function URIfromUserPass(){
+	return encodeURI('username='+document.getElementById("user_id").value) + '&' +encodeURI('password='+document.getElementById("pass_id").value);
+}
+
+function admin(){
+	document.getElementById("form1").submit();
+}
+
 function unlock(){
 xhr = new XMLHttpRequest();
 
@@ -36,7 +45,7 @@ xhr.onload = function() {
         alert('Request failed.  Returned status of ' + xhr.status);
     }
 };
-sendString = encodeURI('username='+document.getElementById("user_id").value) + '&' +encodeURI('password='+document.getElementById("pass_id").value);
+sendString = URIfromUserPass();
 xhr.send(sendString);
 }
 </script>

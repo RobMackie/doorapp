@@ -11,7 +11,7 @@ body{
   style="color:red;"
 }
 
-#password, #login{
+.password, #login{
   border: 1px solid #333333;
   padding: 2px;
   margine: 4px;
