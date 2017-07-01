@@ -9,29 +9,34 @@ class Users(object):
         self.path = 'users.json'
         try:
             with open(self.path, 'r') as user_file:
-                self.users = json.loads(user_file.read())         
+                self.users = json.loads(user_file.read())
         except:
             pass
     def __str__(self):
         result = ''
         for user in self.users:
-            result +=  user + '\n'
+            result +=  user + '-' + self.users[user]['MAC'] + '\n'
         return result
     def save(self):
         with open(self.path, 'w') as user_file:
                json.dump(self.users, user_file)
-        
+
 # if username already exists, this overwrites it.   So be careful upon calling it!
-    def add(self, username, password):
+    def add(self, username, mac, password):
         self.users[username] = {}
+        self.users[username]['MAC'] = mac
         self.users[username]['password'] = pwd_context.hash(password)
+        self.users[username]['admin'] = False;
         self.save();
+    def setAdmin(self, admin):
+        self.users[username]['admin'] = admin;
+        self.save()
     def remove(self, username):
         uname = self.get(username);
         if uname:
             del self.users[uname];
             self.save()
-            
+
     def change_password(self, username, newpass):
         self.users[username]['password'] = pwd_context.hash(newpass)
         self.save();
@@ -42,7 +47,9 @@ class Users(object):
         for key in self.users:
             if key.lower() == lower_username:
                 return key
-        return ''   # not found        
+        return ''   # not found
+    def get_users(self):
+        return self.users;
     def verify_password(self, username_in,password):
         username = self.get(username_in)
         if username:
@@ -52,13 +59,14 @@ class Users(object):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--add', nargs=2, dest='user_add', default=[], help='add user <username> <pass>')
+    parser.add_argument('--add', nargs=2, dest='user_add', default=[], help='add user <username> <mac>')
     parser.add_argument('--del', nargs=1, dest='user_del', default=[], help='del user <username>')
     results = parser.parse_args()
-    
+
     users = Users();
     if results.user_add:
-       users.add(results.user_add[0], results.user_add[1])
+       # Adding a new user gives a default password of the mac address
+       users.add(results.user_add[0], results.user_add[1], results.user_add[1])
     if results.user_del:
         users.remove(results.user_del[0])
 

@@ -1,0 +1,50 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="static/style.css"/>
+	    <title>Door App Admin</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	</head>
+<body>
+<CENTER>
+<h1>Door App Admin - ${uname}</h1>
+<H3 class="error">${error}</H3>
+<A href="/log">View Log</A>
+<hr/>
+<!-- This will only be shown if an admin -->
+<form>
+  <H3>Change Users</H3>
+<table class="users" width="100%">
+  <tr><td>Del</td><td>User</td><td>MAC</td><td>Admin</td><td>Reset</td></tr>
+  % for user in users:
+     <TR class="users" uid="${user}">
+       <TD><input type="checkbox" value="false"/></td>
+       <TD>${user}</TD>
+       <TD>${users[user]['MAC']}</TD>
+       <TD><input type="checkbox" ${'checked' if users[user]['admin'] else '' }/></TD>
+       <TD><input type="checkbox" value="false"/></td>
+     </TR>
+  % endfor
+  <tr id="new">
+    <td><input type="checkbox" value="false"/></td>
+    <td><input type="text" placeholder="User Name"/></td>
+    <td><input type="text" placeholder="MAC address"/></td>
+    <td><input type="checkbox" value="false"/><td>
+    <td>--<td>
+  </tr>
+</table>
+    <input type="button" value="Change Users" onclick="changeUser()"/>
+</form>
+<HR/>
+<!-- end admin only -->
+<form>
+    <H3>Change Password</H3>
+    <input id="pass_id" type="password" name="newpass1"  placeholder="New Password1"/><br/>
+    <input id="pass_id" type="password" name="newpass2"  placeholder="New Password2"/><br/>
+
+    <input type="button" value="Change Password" onclick="changePass()"/>
+</form>
+<hr/>
+<A href="/">Return to mainpage</A><br/>
+</CENTER>
+</body>
+</html>

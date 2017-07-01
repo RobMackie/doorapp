@@ -10,11 +10,11 @@ logFile = open("doorapp.log", "a+", 0)   # 0 is unbuffered
 
 ## For running on Raspberry Pi
 try:
-   import RPi.GPIO as GPIO 
+   import RPi.GPIO as GPIO
    TEST_ONLY = False
 except:
    TEST_ONLY = True
-   
+
 def unlockIO(pin):
    if TEST_ONLY:
       print "Unlock test"
@@ -33,9 +33,9 @@ class DoorGPIO(object):
            GPIO.setup(self.pin, GPIO.OUT)
         else:
            print "---- NO GPIO WORKING!!! ---- "
-    
+
     def unlock(self, user):
-        logStr = time.asctime() + ": " + user + " unlocking door"
+        logStr = time.asctime() + ": " + user + " unlocking door" + "\n"
         print "--- " + logStr
         logFile.write(logStr)
         t = threading.Thread(target=unlockIO,args=(self.pin,))
@@ -45,17 +45,26 @@ class DoorApp(object):
     def __init__(self):
         self.users = Users();
         self.lookup = TemplateLookup(directories=['HTMLTemplates'],default_filters=['h'])
-        self.door = DoorGPIO()
+        self.door = DoorGPIO() 
 
     def template(self, name, **kwargs):
         return self.lookup.get_template(name).render(**kwargs);
     def show_mainpage(self, error=''):
         return self.template("mainpage.html", error = error)
-    
+
     @cherrypy.expose
     def index(self):
         return self.show_mainpage()
-
+    # TEMPORARY!!!!!
+    @cherrypy.expose
+    def admin(self):
+        users = self.users.get_users();
+        return self.template("admin.html", uname = "alan", users=users, error = "")
+    # end of TEMPORARY
+    @cherrypy.expose
+    def log(self):
+        with open('doorapp.log', 'r') as f:
+           return self.template("log.html", error = "", logFile = f)
     @cherrypy.expose
     def unlock(self,username=None,password=None):
         if self.users.verify_password(username, password):
@@ -67,6 +76,6 @@ class DoorApp(object):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="TFI Door Unlocker")
     parser.add_argument('conf')
-    args = parser.parse_args()   
-        
+    args = parser.parse_args()
+
     cherrypy.quickstart(DoorApp(),'', args.conf)
