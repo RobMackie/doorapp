@@ -1,7 +1,0 @@
-http://www.openwall.com/articles/PHP-Users-Passwords
-
-http://php.net/manual/en/function.password-verify.php
-
-http://www.raspberry-pi-geek.com/Archive/2014/07/PHP-on-Raspberry-Pi
-
-
