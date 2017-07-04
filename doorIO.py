@@ -1,3 +1,8 @@
+import time
+import threading
+
+logFile = open("doorapp.log", "a+", 0)   # 0 is unbuffered
+
 ## For running on Raspberry Pi
 try:
    import RPi.GPIO as GPIO
@@ -30,3 +35,7 @@ class DoorGPIO(object):
         logFile.write(logStr)
         t = threading.Thread(target=unlockIO,args=(self.pin,))
         t.start()
+
+if __name__ == '__main__':
+    door = DoorGPIO();
+    door.unlock("command line test")

@@ -3,11 +3,7 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 from users import Users
 import argparse
-import time
-import threading
 from doorIO import DoorGPIO;
-
-logFile = open("doorapp.log", "a+", 0)   # 0 is unbuffered
 
 class DoorApp(object):
     def __init__(self):
