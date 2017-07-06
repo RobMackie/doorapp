@@ -13,10 +13,11 @@ except:
 def unlockIO(pin):
    if TEST_ONLY:
       print "Unlock test"
-   elif GPIO.input(pin) != GPIO.HIGH:
-      GPIO.output(pin, GPIO.HIGH)
+   else:
+##   elif GPIO.input(pin) != GPIO.LOW:
+      GPIO.output(pin, GPIO.LOW)
       time.sleep(5)
-      GPIO.output(pin, not GPIO.input(self.pin))
+      GPIO.output(pin, GPIO.HIGH)
 
 
 class DoorGPIO(object):
