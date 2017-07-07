@@ -27,6 +27,7 @@ class DoorGPIO(object):
            print "GPIO Version: " + GPIO.VERSION
            GPIO.setmode(GPIO.BOARD)
            GPIO.setup(self.pin, GPIO.OUT)
+           GPIO.output(self.pin, GPIO.HIGH)
         else:
            print "---- NO GPIO WORKING!!! ---- "
 
