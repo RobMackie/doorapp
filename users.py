@@ -83,7 +83,7 @@ if __name__ == '__main__':
     users = Users();
     if results.user_add:
        # Adding a new user gives a default password of the mac address
-       users.add(results.user_add[0], results.user_add[1], results.user_add[1])
+       users.add(results.user_add[0], results.user_add[1], results.user_add[1][-5:])
     if results.user_del:
         users.remove(results.user_del[0])
     if results.user_out: 
