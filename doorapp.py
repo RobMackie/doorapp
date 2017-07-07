@@ -23,7 +23,7 @@ class DoorApp(object):
     def admin(self, username=None, password=None):
         if self.users.verify_password(username, password):
             users = self.users.get_users();
-            return self.template("admin.html", uname = username, users=users, error = "")
+            return self.template("admin.html", uname = self.users.get(username), users=users, error = "")
         return self.show_mainpage("Incorrect user/password combination");
     @cherrypy.expose
     def log(self):
@@ -53,5 +53,5 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="TFI Door Unlocker")
     parser.add_argument('conf')
     args = parser.parse_args()
-
+    cherrypy.engine.autoreload.files.add("users.json");
     cherrypy.quickstart(DoorApp(),'', args.conf)
