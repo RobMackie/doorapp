@@ -32,7 +32,7 @@ class DoorApp(object):
     @cherrypy.expose
     def unlock(self,username=None,password=None):
         if self.users.verify_password(username, password):
-            if password == self.users.get_mac(username):
+            if password == self.users.get_mac(username)[-5:]:
                 return "Must change password from default before unlocking"
             self.door.unlock(username);
             return "";
