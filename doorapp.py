@@ -53,5 +53,4 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="TFI Door Unlocker")
     parser.add_argument('conf')
     args = parser.parse_args()
-    cherrypy.engine.autoreload.files.add("users.json");
     cherrypy.quickstart(DoorApp(),'', args.conf)
