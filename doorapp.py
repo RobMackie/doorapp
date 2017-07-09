@@ -88,6 +88,13 @@ class DoorApp(object):
             return "";
         return self.show_mainpage("An admin is not currently logged in");
     @cherrypy.expose
+    def resetPass(self,uname=None):
+        if Cookie('username').get(''):
+            self.users.change_password(uname, self.users.get_mac(uname)[-5:]);
+            return "";
+        return self.show_mainpage("An admin is not currently logged in");
+
+    @cherrypy.expose
     def unlock(self,username=None,password=None):
         if self.users.verify_password(username, password):
             if password == self.users.get_mac(username)[-5:]:

@@ -19,7 +19,8 @@
      <TR class="users" uid="${user}">
        <TD>${user}</TD>
        <TD><button name="Edit" onclick='editUser("${user}")'>Edit</button>
-			     <button name="Del" onclick='deleteUser("${user}")'>Delete</button></TD>
+			     <button name="Del" onclick='deleteUser("${user}")'>Delete</button>
+				 	 <button name="Reset" onclick='resetPassword("${user}")'>Reset Password</button></TD>
      </TR>
   % endfor
 </table>
@@ -58,6 +59,29 @@ function deleteUser(user){
 				else{
 					alert("User Deleted");
 					window.location.href="/admin";
+				}
+			}
+			else{
+				alert('Request failed.  Returned status of ' + xhr.status);
+			}
+		};
+		sendString = encodeURI('uname='+user);
+		xhr.send(sendString);
+	}
+}
+function resetPassword(user){
+	if(confirm("OK to reset password for - " + user + "?")){
+		xhr = new XMLHttpRequest();
+
+		xhr.open('POST', "resetPass", true);
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.onload = function() {
+			if (xhr.status === 200){
+				if(xhr.responseText != ''){
+					alert('Error: ' + xhr.responseText);
+				}
+				else{
+					alert("User Password Reset");
 				}
 			}
 			else{

@@ -14,10 +14,6 @@
         <td><input id="mac" type="text" value="${mac}"/></td></tr>
     <tr><td>Admin</td>
         <td><input id="admin" type="checkbox" ${'checked' if admin else ''} /></td></tr>
-% if edit:
-    <tr><td>Reset Password</td>
-        <td><input type="button" value="Reset Password" onclick="resetPassword()"/></td></tr>
-% endif
   </table>
   <input type="button" value=${"Change" if edit else "Add"} onclick="doneEditing()"/>
 </form>
@@ -52,9 +48,5 @@ function doneEditing(){
    else{
 		 alert("MAC address can't be empty!");
 	 }
-}
-
-function resetPassword(){
-  alert("This isn't functional yet!");
 }
 </script>
