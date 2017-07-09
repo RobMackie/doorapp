@@ -12,29 +12,18 @@
 <hr/>
 <!-- This will only be shown if an admin -->
 % if users[uname]['admin']:
-<form>
-  <H3>Change Users</H3>
+  <H3>Users</H3>
 <table class="users" width="100%">
-  <tr><td>Del</td><td>User</td><td>MAC</td><td>Admin</td><td>Reset</td></tr>
+  <tr><th>User</th><th>Actions</th></tr>
   % for user in users:
      <TR class="users" uid="${user}">
-       <TD><input type="checkbox" value="false"/></td>
        <TD>${user}</TD>
-       <TD>${users[user]['MAC']}</TD>
-       <TD><input type="checkbox" ${'checked' if users[user]['admin'] else '' }/></TD>
-       <TD><input type="checkbox" value="false"/></td>
+       <TD><button name="Edit" onclick='editUser("${user}")'>Edit</button>
+			     <button name="Del" onclick='deleteUser("${user}")'>Delete</button></TD>
      </TR>
   % endfor
-  <tr id="new">
-    <td><input type="checkbox" value="false"/></td>
-    <td><input type="text" placeholder="User Name"/></td>
-    <td><input type="text" placeholder="MAC address"/></td>
-    <td><input type="checkbox" value="false"/><td>
-    <td>--<td>
-  </tr>
 </table>
-    <input type="button" value="Change Users" onclick="changeUser()"/>
-</form>
+<button name="Add" onclick="addUser()">Add User</button>
 <HR/>
 % endif
 <!-- end admin only -->
@@ -52,6 +41,38 @@
 </body>
 </html>
 <script>
+function editUser(user){
+	window.location.href="/edit?uname="+user;
+}
+function deleteUser(user){
+	if(confirm("OK to delete - " + user + "?")){
+		xhr = new XMLHttpRequest();
+
+		xhr.open('POST', "delete", true);
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.onload = function() {
+			if (xhr.status === 200){
+				if(xhr.responseText != ''){
+					alert('Error: ' + xhr.responseText);
+				}
+				else{
+					alert("User Deleted");
+					window.location.href="/admin";
+				}
+			}
+			else{
+				alert('Request failed.  Returned status of ' + xhr.status);
+			}
+		};
+		sendString = encodeURI('uname='+user);
+		xhr.send(sendString);
+	}
+}
+
+function addUser(){
+	window.location.href="/add";
+}
+
 function changePass(){
   if(document.getElementById("newpass1").value === document.getElementById("newpass2").value){
     xhr = new XMLHttpRequest();

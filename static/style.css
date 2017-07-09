@@ -16,3 +16,5 @@ body{
   padding: 2px;
   margine: 4px;
 }
+
+table.users tr:nth-child(even) {background-color: #f2f2f2; }

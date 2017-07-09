@@ -30,12 +30,17 @@ class Users(object):
         self.userfile_mtime = os.stat(self.path).st_mtime;
 
 # if username already exists, this overwrites it.   So be careful upon calling it!
-    def add(self, username, mac, password):
+    def add(self, username, mac, password, admin = False):
         self.loadIfNewer();
         self.users[username] = {}
         self.users[username]['MAC'] = mac
         self.users[username]['password'] = pwd_context.hash(password)
-        self.users[username]['admin'] = False;
+        self.users[username]['admin'] = admin;
+        self.save();
+    def edit(self, username, mac, admin):
+        uname = self.get(username);
+        self.users[uname]['MAC'] = mac
+        self.users[uname]['admin'] = admin;
         self.save();
     def remove(self, username):
         uname = self.get(username);
@@ -76,6 +81,10 @@ class Users(object):
     def get_mac(self, username_in):
         username = self.get(username_in)
         return self.users[username]['MAC']
+    def get_admin(self, username_in):
+        username = self.get(username_in)
+        return self.users[username]['admin']
+
     def verify_password(self, username_in,password):
         username = self.get(username_in)
         if username:
