@@ -28,6 +28,8 @@ class Users(object):
         with open(self.path, 'w') as user_file:
                json.dump(self.users, user_file)
         self.userfile_mtime = os.stat(self.path).st_mtime;
+        with open("iptables", 'w') as iptable_file:
+            self.make_iptable_file(iptable_file);
 
 # if username already exists, this overwrites it.   So be careful upon calling it!
     def add(self, username, mac, password, admin = False):
