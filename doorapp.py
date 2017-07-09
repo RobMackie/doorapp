@@ -3,6 +3,7 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 from users import Users
 import argparse
+import os
 from doorIO import DoorGPIO;
 
 class DoorApp(object):
@@ -27,8 +28,8 @@ class DoorApp(object):
         return self.show_mainpage("Incorrect user/password combination");
     @cherrypy.expose
     def log(self):
-        with open('doorapp.log', 'r') as f:
-           return self.template("log.html", error = "", logFile = f)
+        f = os.popen('tail -n 100 doorapp.log')
+        return self.template("log.html", error = "", logFile = f)
     @cherrypy.expose
     def unlock(self,username=None,password=None):
         if self.users.verify_password(username, password):
