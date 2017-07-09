@@ -30,7 +30,9 @@ class DoorGPIO(object):
            GPIO.output(self.pin, GPIO.HIGH)
         else:
            print "---- NO GPIO WORKING!!! ---- "
-
+    def __del__(self):
+        if not TEST_ONLY:
+            GPIO.cleanup();
     def unlock(self, user):
         logStr = time.asctime() + ": " + user + " unlocking door" + "\n"
         print "--- " + logStr
