@@ -14,10 +14,11 @@
 % if users[uname]['admin']:
   <H3>Users</H3>
 <table class="users" width="100%">
-  <tr><th>User</th><th>Actions</th></tr>
+  <tr><th>User</th><th>MAC</th><th>Actions</th></tr>
   % for user in users:
      <TR class="users" uid="${user}">
        <TD>${user}</TD>
+			 <TD>${users[user]['MAC']}</TD>
        <TD><button name="Edit" onclick='editUser("${user}")'>Edit</button>
 			     <button name="Del" onclick='deleteUser("${user}")'>Delete</button>
 				 	 <button name="Reset" onclick='resetPassword("${user}")'>Reset Password</button></TD>
