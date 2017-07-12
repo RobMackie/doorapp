@@ -66,7 +66,7 @@ class DoorApp(object):
     def editUser(self,uname=None, mac=None, admin=None):
         if Cookie('username').get(''):
             if self.users.get(uname):
-                self.users.add(uname, mac, mac[-5:])
+                self.users.edit(uname, mac, admin)
                 return ""
             else:
                return "No user with that name"
