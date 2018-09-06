@@ -16,7 +16,7 @@ def unlockIO(pin):
    else:
 ##   elif GPIO.input(pin) != GPIO.LOW:
       GPIO.output(pin, GPIO.LOW)
-      time.sleep(5)
+      time.sleep(15)
       GPIO.output(pin, GPIO.HIGH)
 
 
