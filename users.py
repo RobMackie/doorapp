@@ -25,7 +25,7 @@ class Users(object):
             with open(self.path, 'r') as user_file:
                 self.users = json.loads(user_file.read())
             self.userfile_mtime = os.stat(self.path).st_mtime
-        except:
+        except IOError:
             pass
 
     def save(self):
@@ -36,12 +36,13 @@ class Users(object):
             self.make_iptable_file(iptable_file)
 
 # if username already exists, this overwrites it.   So be careful upon calling it!
-    def add(self, username, mac, password, admin=False):
+    def add(self, username, mac, password, barcode, admin=False):
         self.loadIfNewer()
         self.users[username] = {}
         self.users[username]['MAC'] = mac
         self.users[username]['password'] = pwd_context.hash(password)
         self.users[username]['admin'] = admin
+        self.users[username]['barcode'] = barcode
         self.save()
 
     def edit(self, username, mac, admin):
@@ -98,6 +99,10 @@ class Users(object):
         f.write("-A INPUT -j DROP\n")
         f.write("COMMIT\n")
 
+    def get_barcode(self, username_in):
+        username = self.get(username_in)
+        return self.users[username]['barcode']
+
     def get_mac(self, username_in):
         username = self.get(username_in)
         return self.users[username]['MAC']
@@ -116,8 +121,8 @@ class Users(object):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--add', nargs=2, dest='user_add',
-                        default=[], help='add user <username> <mac>')
+    parser.add_argument('--add', nargs=3, dest='user_add',
+                        default=[], help='add user <username> <mac> <barcode>')
     parser.add_argument('--del', nargs=1, dest='user_del',
                         default=[], help='del user <username>')
     parser.add_argument('--out', nargs=1, dest='user_out',
@@ -128,7 +133,9 @@ if __name__ == '__main__':
     if results.user_add:
         # Adding a new user gives a default password of the mac address
         users.add(results.user_add[0],
-                  results.user_add[1], results.user_add[1][-5:])
+                  results.user_add[1],
+                  results.user_add[1][-5:],
+                  results.user_add[2])
     if results.user_del:
         users.remove(results.user_del[0])
     if results.user_out:

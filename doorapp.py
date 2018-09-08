@@ -1,9 +1,9 @@
+import argparse
+import os
 import cherrypy
 from mako.template import Template
 from mako.lookup import TemplateLookup
 from users import Users
-import argparse
-import os
 from doorIO import DoorGPIO
 
 
@@ -64,17 +64,17 @@ class DoorApp(object):
         return self.template("log.html", error="", logFile=f)
 
     @cherrypy.expose
-    def addUser(self, uname=None, mac=None, admin=None):
+    def addUser(self, uname=None, mac=None, barcode=None, admin=None):
         if Cookie('username').get(''):
             if self.users.get(uname):
                 return "Already a user with that name"
             else:
-                self.users.add(uname, mac, mac[-5:])
+                self.users.add(uname, mac, barcode, mac[-5:])
                 return ""
         return "An admin is not currently logged in"
 
     @cherrypy.expose
-    def editUser(self, uname=None, mac=None, admin=None):
+    def editUser(self, uname=None, mac=None, barcode=None, admin=None):
         if Cookie('username').get(''):
             if self.users.get(uname):
                 self.users.edit(uname, mac, admin)
@@ -86,13 +86,14 @@ class DoorApp(object):
     @cherrypy.expose
     def add(self):
         if Cookie('username').get(''):
-            return self.template("user.html", edit=False, uname='', mac='', admin=False)
+            return self.template("user.html", edit=False, uname='', mac='', barcode='', admin=False)
         return self.show_mainpage("An admin is not currently logged in")
 
     @cherrypy.expose
     def edit(self, uname=None):
         if Cookie('username').get(''):
-            return self.template("user.html", edit=True, uname=uname, mac=self.users.get_mac(uname), admin=self.users.get_admin(uname))
+            return self.template("user.html", edit=True, uname=uname, mac=self.users.get_mac(uname),
+                                 barcode=self.users.get_barcode(uname), admin=self.users.get_admin(uname))
         return self.show_mainpage("An admin is not currently logged in")
 
     @cherrypy.expose

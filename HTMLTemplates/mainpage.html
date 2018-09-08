@@ -1,51 +1,54 @@
 <html id="mainpage">
-	<head>
-		<link rel="stylesheet" type="text/css" href="static/style.css"/>
-	    <title>Door App</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	</head>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="static/style.css" />
+	<title>Door App</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
 <body>
-<CENTER>
-<h1>Welcome to TFD Headquarters!</h1>
-<H3 class="error">${error}</H3>
-<form id="form1" action="admin">
-    <input id="user_id" type="text" name="username" placeholder="Login Name"/><br/>
-    <input id="pass_id" class="password" type="password" name="password"  placeholder="Password"/><br/>
-    <input type="button" value="Unlock" onclick="unlock()"/>
-		<input type="button" value="Admin" onclick="admin()"/>
-</form>
-</CENTER>
+	<CENTER>
+		<h1>Welcome to TFD Headquarters!</h1>
+		<H3 class="error">${error}</H3>
+		<form id="form1" action="admin">
+			<input id="user_id" type="text" name="username" placeholder="Login Name" /><br />
+			<input id="pass_id" class="password" type="password" name="password" placeholder="Password" /><br />
+			<input type="button" value="Unlock" onclick="unlock()" />
+			<input type="button" value="Admin" onclick="admin()" />
+		</form>
+	</CENTER>
 </body>
+
 </html>
 <script>
-function URIfromUserPass(){
-	return encodeURI('username='+document.getElementById("user_id").value) + '&' +encodeURI('password='+document.getElementById("pass_id").value);
-}
+	function URIfromUserPass() {
+		return encodeURI('username=' + document.getElementById("user_id").value) + '&' + encodeURI('password=' + document.getElementById("pass_id").value);
+	}
 
-function admin(){
-	document.getElementById("form1").submit();
-}
+	function admin() {
+		document.getElementById("form1").submit();
+	}
 
-function unlock(){
-xhr = new XMLHttpRequest();
+	function unlock() {
+		xhr = new XMLHttpRequest();
 
-xhr.open('POST', 'unlock', true);
-xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-xhr.onload = function() {
-    if (xhr.status === 200){
-    	if(xhr.responseText != ''){
-    		alert('Error: ' + xhr.responseText);
-    	}
-		else{
-			alert('Door should have unlocked');
-		}
-		document.getElementById("pass_id").value = '';  // clear password
-    }
-    else{
-        alert('Request failed.  Returned status of ' + xhr.status);
-    }
-};
-sendString = URIfromUserPass();
-xhr.send(sendString);
-}
+		xhr.open('POST', 'unlock', true);
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.onload = function () {
+			if (xhr.status === 200) {
+				if (xhr.responseText != '') {
+					alert('Error: ' + xhr.responseText);
+				}
+				else {
+					alert('Door should have unlocked');
+				}
+				document.getElementById("pass_id").value = '';  // clear password
+			}
+			else {
+				alert('Request failed.  Returned status of ' + xhr.status);
+			}
+		};
+		sendString = URIfromUserPass();
+		xhr.send(sendString);
+	}
 </script>

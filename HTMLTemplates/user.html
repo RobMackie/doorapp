@@ -1,52 +1,66 @@
 <html>
-	<head>
-		<link rel="stylesheet" type="text/css" href="static/style.css"/>
-	    <title>${'Edit User' if edit else 'Add User'}</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	</head>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="static/style.css" />
+	<title>${'Edit User' if edit else 'Add User'}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
 <body>
-	<H1>${'Edit User' if edit else 'Add User'}</H1><br/>
-<form>
-  <table>
-    <tr><td>Name:</td>
-        <td><input id="uname" type="text" ${'readonly' if edit else ''} value="${uname}"/></td></tr>
-    <tr><td>MAC:</td>
-        <td><input id="mac" type="text" value="${mac}"/></td></tr>
-    <tr><td>Admin</td>
-        <td><input id="admin" type="checkbox" ${'checked' if admin else ''} /></td></tr>
-  </table>
-  <input type="button" value=${"Change" if edit else "Add"} onclick="doneEditing()"/>
-</form>
+	<H1>${'Edit User' if edit else 'Add User'}</H1><br />
+	<form>
+		<table>
+			<tr>
+				<td>Name:</td>
+				<td><input id="uname" type="text" ${'readonly' if edit else '' } value="${uname}" /></td>
+			</tr>
+			<tr>
+				<td>Barcoe:</td>
+				<td><input id="barcode" type="text" ${'readonly' if edit else '' } value="${barcode}" /></td>
+			</tr>
+			<tr>
+				<td>MAC:</td>
+				<td><input id="mac" type="text" value="${mac}" /></td>
+			</tr>
+			<tr>
+				<td>Admin</td>
+				<td><input id="admin" type="checkbox" ${'checked' if admin else '' } /></td>
+			</tr>
+		</table>
+		<input type="button" value=${"Change" if edit else "Add" } onclick="doneEditing()" />
+	</form>
 </body>
+
 </html>
 <script>
-function doneEditing(){
-	 if(document.getElementById("mac").value !== ""){
-     xhr = new XMLHttpRequest();
+	function doneEditing() {
+		if (document.getElementById("mac").value !== "") {
+			xhr = new XMLHttpRequest();
 
-     xhr.open('POST', "${'editUser' if edit else 'addUser'}", true);
-     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-     xhr.onload = function() {
-			 if (xhr.status === 200){
-				 if(xhr.responseText != ''){
-					 alert('Error: ' + xhr.responseText);
-				 }
-				 else{
-					 alert("${'User changed' if edit else 'User added'}");
-					 window.location.href="/admin";
-				 }
-			 }
-			 else{
-				 alert('Request failed.  Returned status of ' + xhr.status);
-			 }
-		 };
-		 sendString = encodeURI('uname='+document.getElementById("uname").value) + '&' +
-									encodeURI('mac='+document.getElementById("mac").value) + '&' +
-									encodeURI('admin='+document.getElementById("admin").checked);
-     xhr.send(sendString);
-   }
-   else{
-		 alert("MAC address can't be empty!");
-	 }
-}
+			xhr.open('POST', "${'editUser' if edit else 'addUser'}", true);
+			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			xhr.onload = function () {
+				if (xhr.status === 200) {
+					if (xhr.responseText != '') {
+						alert('Error: ' + xhr.responseText);
+					}
+					else {
+						alert("${'User changed' if edit else 'User added'}");
+						window.location.href = "/admin";
+					}
+				}
+				else {
+					alert('Request failed.  Returned status of ' + xhr.status);
+				}
+			};
+			sendString = encodeURI('uname=' + document.getElementById("uname").value) + '&' +
+				encodeURI('barcode=' + document.getElementById("barcode").value) + '&' +
+				encodeURI('mac=' + document.getElementById("mac").value) + '&' +
+				encodeURI('admin=' + document.getElementById("admin").checked);
+			xhr.send(sendString);
+		}
+		else {
+			alert("MAC address can't be empty!");
+		}
+	}
 </script>
