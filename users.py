@@ -73,7 +73,15 @@ class Users(object):
         f.write("*filter\n");
         f.write(":INPUT ACCEPT [0:0]\n");
         f.write(":FORWARD ACCEPT [0:0]\n");
-        f.write(":OUTPUT ACCEPT [9:588]\n");
+#        f.write(":OUTPUT ACCEPT [9:588]\n");
+#        f.write("-A OUTPUT -p all -j ACCEPT\n");
+        f.write("# Allow loopback\n");
+        f.write("-I INPUT 1 -i lo -j ACCEPT\n");
+        f.write("# Allow DNS\n");
+#        f.write("-A OUTPUT -p udp --dport 53 -j ACCEPT\n");
+        f.write("# Allow connections to some outside sites\n");
+#        f.write("#-A OUTPUT -p tcp -d ev3hub.com -j ACCEPT\n");
+#        f.write("#-A OUTPUT -p tcp -d github.com -j ACCEPT\n");
         f.write("-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT\n");
         for u in self.users:
            f.write("-A INPUT -m mac --mac-source " + self.users[u]['MAC'] + " -j ACCEPT\n");
