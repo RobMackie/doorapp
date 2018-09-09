@@ -1,7 +1,7 @@
 import argparse
 import os
+import urllib2
 import cherrypy
-from mako.template import Template
 from mako.lookup import TemplateLookup
 from users import Users
 from doorIO import DoorGPIO
@@ -116,6 +116,14 @@ class DoorApp(object):
             if password == self.users.get_mac(username)[-5:]:
                 return "Must change password from default before unlocking"
             self.door.unlock(username)
+            url = "http://tfi.ev3hub.com/keyholder/barcode=" + \
+                self.users.get_barcode(username)
+            try:
+                urllib2.urlopen(url)
+            except urllib2.HTTPError as e:
+                return "Couldn't log you in as keyholder: " + e.code
+            except urllib2.URLError as e:
+                return "Couldn't log you in as keyholder: " + e.reason
             return ""
         else:
             return "Incorrect user/password combination"
