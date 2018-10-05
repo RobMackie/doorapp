@@ -119,7 +119,8 @@ class DoorApp(object):
             url = "http://tfi.ev3hub.com/keyholder/barcode=" + \
                 self.users.get_barcode(username)
             try:
-                urllib2.urlopen(url)
+                # urllib2.urlopen(url)
+                pass
             except urllib2.HTTPError as e:
                 return "Couldn't log you in as keyholder: " + e.code
             except urllib2.URLError as e:
