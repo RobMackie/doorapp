@@ -11,6 +11,17 @@ class Users(object):
         self.path = 'users.json'
         self.loadIfNewer()
 
+    def updateCheckIn(self):
+        keyholders = []
+        for user in self.users:
+            if user.barcode:
+                keyholders.append(user.barcode)
+        requestStr = '/admin/updateKeyholders?keyholders='
+        for keyholder in keyholders:
+            requestStr += keyholder + "%2C"
+        requestStr = requestStr[:-3]
+        print(f'Request: {requestStr}')
+
     def __str__(self):
         result = ''
         for user in self.users:
@@ -140,8 +151,8 @@ if __name__ == '__main__':
         users.remove(results.user_del[0])
     if results.user_out:
         users.make_iptable_file(open(results.user_out[0], "w"))
-        print "cat " + results.user_out[0] + " | sudo iptables-restore\n"
+        print ("cat " + results.user_out[0] + " | sudo iptables-restore\n")
 
-    print "User list"
-    print "========="
-    print users
+    print("User list")
+    print("=========")
+    print(users)

@@ -25,7 +25,7 @@
 			% for user in users:
 			<TR class="users" uid="${user}">
 				<TD>${user}</TD>
-				<TD>${users[user]['barcode']}</TD>
+				<TD>${users[user].get('barcode','')}</TD>
 				<TD>${users[user]['MAC']}</TD>
 				<TD><button name="Edit" onclick='editUser("${user}")'>Edit</button>
 					<button name="Del" onclick='deleteUser("${user}")'>Delete</button>

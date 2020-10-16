@@ -10,3 +10,4 @@ iptables
 *.log
 # For virtual environments
 venv/
+venv3/
