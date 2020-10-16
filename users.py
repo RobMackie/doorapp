@@ -1,8 +1,10 @@
 import os
 import json
 import argparse
+import urllib
 from passlib.apps import custom_app_context as pwd_context
 
+URL_BASE = 'http://tfi.ev3hub.com'
 
 class Users(object):
     def __init__(self):
@@ -13,14 +15,15 @@ class Users(object):
 
     def updateCheckIn(self):
         keyholders = []
-        for user in self.users:
-            if user.barcode:
-                keyholders.append(user.barcode)
-        requestStr = '/admin/updateKeyholders?keyholders='
+        for name in self.users:
+            user = self.users[name]
+            keyholders.append(user.get('barcode',''))
+        requestStr = URL_BASE + '/admin/updateKeyholders?keyholders='
         for keyholder in keyholders:
             requestStr += keyholder + "%2C"
         requestStr = requestStr[:-3]
         print(f'Request: {requestStr}')
+        urllib.request.urlopen(requestStr)
 
     def __str__(self):
         result = ''
@@ -45,6 +48,7 @@ class Users(object):
         self.userfile_mtime = os.stat(self.path).st_mtime
         with open("iptables", 'w') as iptable_file:
             self.make_iptable_file(iptable_file)
+        self.updateCheckIn()
 
 # if username already exists, this overwrites it.   So be careful upon calling it!
     def add(self, username, mac, password, barcode, admin=False):
