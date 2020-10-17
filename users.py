@@ -23,7 +23,10 @@ class Users(object):
             requestStr += keyholder + "%2C"
         requestStr = requestStr[:-3]
  #       print(f'Request: {requestStr}')
-        urllib.request.urlopen(requestStr)
+        try:
+            urllib.request.urlopen(requestStr)
+        except AttributeError:
+            urllib.urlopen(requestStr)
 
     def __str__(self):
         result = ''
