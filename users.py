@@ -22,7 +22,7 @@ class Users(object):
         for keyholder in keyholders:
             requestStr += keyholder + "%2C"
         requestStr = requestStr[:-3]
-        print(f'Request: {requestStr}')
+ #       print(f'Request: {requestStr}')
         urllib.request.urlopen(requestStr)
 
     def __str__(self):
@@ -116,7 +116,7 @@ class Users(object):
 
     def get_barcode(self, username_in):
         username = self.get(username_in)
-        return self.users[username]['barcode']
+        return self.users[username].get('barcode', '')
 
     def get_mac(self, username_in):
         username = self.get(username_in)
