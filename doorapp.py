@@ -63,12 +63,12 @@ class DoorApp(object):
         return self.template("log.html", error="", logFile=f)
 
     @cherrypy.expose
-    def addUser(self, uname=None, mac=None, barcode=None, admin=None):
+    def addUser(self, uname=None, mac=None, barcode=None, admin=False):
         if Cookie('username').get(''):
             if self.users.get(uname):
                 return "Already a user with that name"
             else:
-                self.users.add(uname, mac, barcode, mac[-5:])
+                self.users.add(username=uname, mac=mac, password=mac[-5:], barcode=barcode, admin=admin)
                 return ""
         return "An admin is not currently logged in"
 
