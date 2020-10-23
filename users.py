@@ -64,18 +64,21 @@ class Users(object):
         self.save()
 
     def edit(self, username, mac, admin):
+        self.loadIfNewer()
         uname = self.get(username)
         self.users[uname]['MAC'] = mac
         self.users[uname]['admin'] = admin
         self.save()
 
     def remove(self, username):
+        self.loadIfNewer()
         uname = self.get(username)
         if uname:
             del self.users[uname]
             self.save()
 
     def change_password(self, username_in, newpass):
+        self.loadIfNewer()
         username = self.get(username_in)
         self.users[username]['password'] = pwd_context.hash(newpass)
         self.save()
@@ -130,6 +133,7 @@ class Users(object):
         return self.users[username]['admin']
 
     def verify_password(self, username_in, password):
+        self.loadIfNewer()
         username = self.get(username_in)
         if username:
             return pwd_context.verify(password, self.users[username]['password'])
