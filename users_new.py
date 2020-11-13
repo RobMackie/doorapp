@@ -3,11 +3,15 @@ import json
 import argparse
 import urllib
 from passlib.apps import custom_app_context as pwd_context
-
+from cryptography.fernet import Fernet
 
 class CheckMeIn(object):
     #URL_BASE = 'http://tfi.ev3hub.com'    
     URL_BASE = "http://127.0.0.1:8089"
+
+    def __init__(self):
+        with open('checkmein.key','rb') as key_file:
+            self.key = Fernet(key_file.read())
 
     def sendRequest(self, requestStr):
         requestStr = self.URL_BASE + requestStr
@@ -29,8 +33,11 @@ class Users(object):
         self.checkMeIn.sendRequest('/unlock?location=BFF&barcode=' + user['barcode'])
 
     def getUpdatedAccounts(self):
-        results = self.checkMeIn.sendRequest('/admin/getKeyholderJSON').read()
+        encryptedResults = self.checkMeIn.sendRequest('/admin/getKeyholderJSON').read()
+        print(encryptedResults)
         # decrypt should happen here
+        results = self.checkMeIn.key.decrypt(encryptedResults)
+
         self.users = json.loads(results)
         with open(self.path, 'w') as user_file:
             json.dump(self.users, user_file)
