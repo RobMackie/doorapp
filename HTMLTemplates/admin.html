@@ -12,131 +12,29 @@
 		<H3 class="error">${error}</H3>
 		<A href="/log">View Log</A>
 		<hr />
-		<!-- This will only be shown if an admin -->
-		% if users[uname]['admin']:
+		<A HREF="update">Click here to update list</A>
 		<H3>Users</H3>
 		<table class="users" width="100%">
 			<tr>
 				<th>User</th>
 				<th>Barcode</th>
-				<th>MAC</th>
-				<th>Actions</th>
+				<th>Device</th>
 			</tr>
 			% for user in users:
-			<TR class="users" uid="${user}">
-				<TD>${user}</TD>
-				<TD>${users[user].get('barcode','')}</TD>
-				<TD>${users[user]['MAC']}</TD>
-				<TD><button name="Edit" onclick='editUser("${user}")'>Edit</button>
-					<button name="Del" onclick='deleteUser("${user}")'>Delete</button>
-					<button name="Reset" onclick='resetPassword("${user}")'>Reset Password</button></TD>
+			<TR class="users">
+				<TD>${user['user']}</TD>
+				<TD>${user['barcode']}</TD>
+				<TD>
+					% for device in user['devices']:
+					${device['name']} - ${device['mac']}<br />
+					% endfor
+				</TD>
 			</TR>
 			% endfor
 		</table>
-		<button name="Add" onclick="addUser()">Add User</button>
 		<HR />
-		% endif
-		<!-- end admin only -->
-		<form>
-			<H3>Change Password</H3>
-			<input id="oldpass" class="password" type="password" name="password" placeholder="Old Password" /><br />
-			<input id="newpass1" class="password" type="password" name="newpass1" placeholder="New Password1" /><br />
-			<input id="newpass2" class="password" type="password" name="newpass2" placeholder="New Password2" /><br />
-
-			<input type="button" value="Change Password" onclick="changePass()" />
-		</form>
-		<hr />
 		<A href="/">Return to mainpage</A><br />
 	</CENTER>
 </body>
 
 </html>
-<script>
-	function editUser(user) {
-		window.location.href = "/edit?uname=" + user;
-	}
-	function deleteUser(user) {
-		if (confirm("OK to delete - " + user + "?")) {
-			xhr = new XMLHttpRequest();
-
-			xhr.open('POST', "delete", true);
-			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-			xhr.onload = function () {
-				if (xhr.status === 200) {
-					if (xhr.responseText != '') {
-						alert('Error: ' + xhr.responseText);
-					}
-					else {
-						alert("User Deleted");
-						window.location.href = "/admin";
-					}
-				}
-				else {
-					alert('Request failed.  Returned status of ' + xhr.status);
-				}
-			};
-			sendString = encodeURI('uname=' + user);
-			xhr.send(sendString);
-		}
-	}
-	function resetPassword(user) {
-		if (confirm("OK to reset password for - " + user + "?")) {
-			xhr = new XMLHttpRequest();
-
-			xhr.open('POST', "resetPass", true);
-			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-			xhr.onload = function () {
-				if (xhr.status === 200) {
-					if (xhr.responseText != '') {
-						alert('Error: ' + xhr.responseText);
-					}
-					else {
-						alert("User Password Reset");
-					}
-				}
-				else {
-					alert('Request failed.  Returned status of ' + xhr.status);
-				}
-			};
-			sendString = encodeURI('uname=' + user);
-			xhr.send(sendString);
-		}
-	}
-
-	function addUser() {
-		window.location.href = "/add";
-	}
-
-	function changePass() {
-		if (document.getElementById("newpass1").value === document.getElementById("newpass2").value) {
-			xhr = new XMLHttpRequest();
-
-			xhr.open('POST', 'changePass', true);
-			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-			xhr.onload = function () {
-				if (xhr.status === 200) {
-					if (xhr.responseText != '') {
-						alert('Error: ' + xhr.responseText);
-					}
-					else {
-						alert('Password changed!');
-						document.getElementById("oldpass").value = '';
-						document.getElementById("newpass1").value = '';
-						document.getElementById("newpass2").value = '';
-					}
-					document.getElementById("pass_id").value = '';  // clear password
-				}
-				else {
-					alert('Request failed.  Returned status of ' + xhr.status);
-				}
-			};
-			sendString = encodeURI('username=${uname}') + '&' + encodeURI('oldpass=' + document.getElementById("oldpass").value) + '&'
-				+ encodeURI('newpass=' + document.getElementById("newpass1").value) + '&'
-				;
-			xhr.send(sendString);
-		}
-		else {
-			alert("New Passwords don't match");
-		}
-	}
-</script>
