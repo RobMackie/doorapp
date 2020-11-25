@@ -6,8 +6,8 @@ from passlib.apps import custom_app_context as pwd_context
 from cryptography.fernet import Fernet
 
 class CheckMeIn(object):
-    #URL_BASE = 'http://tfi.ev3hub.com'    
-    URL_BASE = "http://127.0.0.1:8089"
+    URL_BASE = 'http://tfi.ev3hub.com'    
+    #URL_BASE = "http://127.0.0.1:8089"
 
     def __init__(self):
         with open('checkmein.key','rb') as key_file:
