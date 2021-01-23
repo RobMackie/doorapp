@@ -83,7 +83,7 @@ class Users(object):
                 f.write("-A INPUT -m mac --mac-source " + d['mac'] + " -j ACCEPT\n")
         
         f.write("# -A INPUT -j LOG\n")
-        f.write("-A INPUT -j DROP\n")
+        f.write("-A INPUT -j ACCEPT\n")
         f.write("COMMIT\n")
 
     def verify_password(self, username_in, password):
