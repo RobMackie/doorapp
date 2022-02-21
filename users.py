@@ -4,7 +4,7 @@ import argparse
 import urllib
 from passlib.apps import custom_app_context as pwd_context
 
-URL_BASE = 'http://tfi.ev3hub.com'
+URL_BASE = 'http://tfi.checkmein.site'
 
 class Users(object):
     def __init__(self):
@@ -110,7 +110,7 @@ class Users(object):
         f.write("# Allow DNS\n")
 #        f.write("-A OUTPUT -p udp --dport 53 -j ACCEPT\n");
         f.write("# Allow connections to some outside sites\n")
-#        f.write("#-A OUTPUT -p tcp -d ev3hub.com -j ACCEPT\n");
+#        f.write("#-A OUTPUT -p tcp -d checkmein.site -j ACCEPT\n");
 #        f.write("#-A OUTPUT -p tcp -d github.com -j ACCEPT\n");
         f.write("-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT\n")
         for u in self.users:
