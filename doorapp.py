@@ -2,7 +2,7 @@ import argparse
 import os
 import cherrypy
 from mako.lookup import TemplateLookup
-from users import Users
+from users_new import Users
 from doorIO import DoorGPIO
 
 
@@ -53,80 +53,28 @@ class DoorApp(object):
         if username_sess:
             username = username_sess
         if username_sess or self.users.verify_password(username, password):
-            username = Cookie('username').set(self.users.get(username))
-            return self.template("admin.html", uname=username, users=self.users.get_users(), error="")
+            username = Cookie('username').set(self.users.get(username)['user'])
+            return self.template("admin.html", uname=username, users=self.users.users, error="")
         return self.show_mainpage("Incorrect user/password combination")
 
     @cherrypy.expose
     def log(self):
         f = os.popen('tail -n 100 doorapp.log')
         return self.template("log.html", error="", logFile=f)
-
-    @cherrypy.expose
-    def addUser(self, uname=None, mac=None, barcode=None, admin=False):
-        if Cookie('username').get(''):
-            if self.users.get(uname):
-                return "Already a user with that name"
-            else:
-                self.users.add(username=uname, mac=mac, password=mac[-5:], barcode=barcode, admin=admin)
-                return ""
-        return "An admin is not currently logged in"
-
-    @cherrypy.expose
-    def editUser(self, uname=None, mac=None, barcode=None, admin=None):
-        if Cookie('username').get(''):
-            if self.users.get(uname):
-                self.users.edit(uname, mac, admin)
-                return ""
-            else:
-                return "No user with that name"
-        return "An admin is not currently logged in"
-
-    @cherrypy.expose
-    def add(self):
-        if Cookie('username').get(''):
-            return self.template("user.html", edit=False, uname='', mac='', barcode='', admin=False)
-        return self.show_mainpage("An admin is not currently logged in")
-
-    @cherrypy.expose
-    def edit(self, uname=None):
-        if Cookie('username').get(''):
-            return self.template("user.html", edit=True, uname=uname, mac=self.users.get_mac(uname),
-                                 barcode=self.users.get_barcode(uname), admin=self.users.get_admin(uname))
-        return self.show_mainpage("An admin is not currently logged in")
-
-    @cherrypy.expose
-    def delete(self, uname=None):
-        if Cookie('username').get(''):
-            self.users.remove(uname)
-            return ""
-        return self.show_mainpage("An admin is not currently logged in")
-
-    @cherrypy.expose
-    def resetPass(self, uname=None):
-        if Cookie('username').get(''):
-            self.users.change_password(uname, self.users.get_mac(uname)[-5:])
-            return ""
-        return self.show_mainpage("An admin is not currently logged in")
-
+ 
     @cherrypy.expose
     def unlock(self, username=None, password=None):
         if self.users.verify_password(username, password):
-            if password == self.users.get_mac(username)[-5:]:
-                return "Must change password from default before unlocking"
             self.door.unlock(username)
+            self.users.sendUnlock(self.users.get(username))
             return ""
         else:
             return "Incorrect user/password combination"
-
+    
     @cherrypy.expose
-    def changePass(self, username=None, oldpass=None, newpass=None):
-        if self.users.verify_password(username, oldpass):
-            self.users.change_password(username, newpass)
-            return ""
-        else:
-            return "Incorrect user/password combination"
-
+    def update(self):
+        self.users.getUpdatedAccounts()
+        return self.index()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="TFI Door Unlocker")
